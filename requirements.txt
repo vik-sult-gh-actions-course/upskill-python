@@ -23,3 +23,6 @@ pyarrow
 fastparquet
 openpyxl
 starlette
+black
+pylint
+mypy
