@@ -35,6 +35,7 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 2. Run pgsql script ```SFTPApi/SFTPApi.sql``` to create db schema and db table
 3. Run python script python ```python SFTPApi/sync_data.py```
 
+
 # Pytest
 1. Enter source virtual environment ```fastapienv/bin/activate```
 2. Run command ```pytest app -W ignore::DeprecationWarning```
