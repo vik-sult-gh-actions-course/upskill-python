@@ -26,7 +26,7 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
-class TaskCreateRequest(BaseModel):
+class TaskCreate(BaseModel):
     title: str = Field(min_length=10)
     description: str | None = Field(
         default=None, title="The description of the task", max_length=200
@@ -52,14 +52,14 @@ class TaskCreateRequest(BaseModel):
     }
 
 
-class GetTaskResponse(BaseModel):
+class TaskResponse(BaseModel):
     title: str = Field(min_length=10)
     description: str | None
     status: TaskStatus
     due_date: datetime.date | None
 
 
-class TaskUpdateRequest(BaseModel):
+class TaskUpdate(BaseModel):
     title: str | None = None
     description: str | None = None
     status: TaskStatus | None
@@ -84,13 +84,12 @@ async def get_task(request: Request, db: db_dependency):
     return db.query(Task).all()
 
 
-@router.get('/{task_id}', status_code=status.HTTP_200_OK, response_model=GetTaskResponse)
+@router.get('/{task_id}', status_code=status.HTTP_200_OK)
 async def get_user(request: Request, task_id: int, db: db_dependency):
     return db.query(Task).filter(Task.id == task_id).first()
 
-
 @router.post('/', status_code=status.HTTP_201_CREATED)
-async def create_task(user_request: TaskCreateRequest, db: db_dependency):
+async def create_task(user_request: TaskCreate, db: db_dependency):
     task_request_model_dump = user_request.model_dump()
     task_model = Task(**task_request_model_dump)
     db.add(task_model)
@@ -100,8 +99,8 @@ async def create_task(user_request: TaskCreateRequest, db: db_dependency):
 
 
 # Update (PUT)
-@router.put("/{task_id}", status_code=status.HTTP_200_OK, response_model=GetTaskResponse)
-async def update_task(task_id: int, user_request: TaskUpdateRequest, db: db_dependency):
+@router.put("/{task_id}", status_code=status.HTTP_200_OK, response_model=TaskResponse)
+async def update_task(task_id: int, user_request: TaskUpdate, db: db_dependency):
     task_model = db.query(Task).filter(Task.id == task_id).first()
     if user_request.title is not None:
         task_model.title = user_request.title
