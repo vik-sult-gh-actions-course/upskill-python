@@ -69,8 +69,8 @@ jobs:
       - name: Deploy to server
         run: |
           docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest && \
-             docker stop ${{ env.CONTAINER_NAME }} || true && \
-             docker rm ${{ env.CONTAINER_NAME }} || true && \
-             docker run -d --name ${{ env.CONTAINER_NAME }} \
-               -p ${{ env.PORT }}:80 \
-               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+              docker stop ${{ env.CONTAINER_NAME }} || true && \
+              docker rm ${{ env.CONTAINER_NAME }} || true && \
+              docker run -d --name ${{ env.CONTAINER_NAME }} \
+              -p ${{ env.PORT }}:80 \
+              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
