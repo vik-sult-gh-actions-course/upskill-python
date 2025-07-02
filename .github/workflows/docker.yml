@@ -66,15 +66,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          ssh -o StrictHostKeyChecking=no \
             "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest && \
              docker stop ${{ env.CONTAINER_NAME }} || true && \
              docker rm ${{ env.CONTAINER_NAME }} || true && \
