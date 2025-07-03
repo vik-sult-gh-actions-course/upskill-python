@@ -20,4 +20,5 @@ jobs:
           pip install -r requirements.txt
       - name: Analysing the code with pylint
         run: |
+          cd app
           pylint $(git ls-files '*.py')
