@@ -1,3 +1,31 @@
+"""
+Task management API router for FastAPI.
+
+This module defines the API endpoints for creating, retrieving, updating, and deleting tasks.
+It uses FastAPI for routing, Pydantic for data validation, and SQLAlchemy for database interactions.
+
+Endpoints:
+    - GET /task/ : Retrieve all tasks.
+    - GET /task/{task_id} : Retrieve a specific task by ID.
+    - POST /task/ : Create a new task.
+    - PUT /task/{task_id} : Update an existing task.
+    - DELETE /task/{task_id} : Delete a task.
+
+Models:
+    - TaskCreate: Schema for creating a task.
+    - TaskResponse: Schema for returning task data.
+    - TaskUpdate: Schema for updating a task.
+
+Dependencies:
+    - Database session management via SQLAlchemy.
+
+Requires:
+    - FastAPI
+    - SQLAlchemy
+    - Pydantic
+    - Starlette
+
+"""
 import datetime
 from typing import Annotated
 
@@ -87,6 +115,7 @@ async def get_task(request: Request, db: db_dependency):
 @router.get('/{task_id}', status_code=status.HTTP_200_OK)
 async def get_user(request: Request, task_id: int, db: db_dependency):
     return db.query(Task).filter(Task.id == task_id).first()
+
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 async def create_task(user_request: TaskCreate, db: db_dependency):

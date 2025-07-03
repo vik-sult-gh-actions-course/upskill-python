@@ -1,3 +1,16 @@
+"""
+Database Configuration Module
+
+This module is responsible for setting up the database connection using SQLAlchemy.
+It loads environment variables from a `.env` file to configure the database engine,
+creates a session factory for interacting with the database, and prepares the base
+class for declarative models.
+
+Key components:
+- `engine`: SQLAlchemy engine connected to the database specified in the environment variables.
+- `SessionLocal`: Factory for creating database sessions.
+- `Base`: Declarative base class with an explicit schema set to 'public' for model definitions.
+"""
 import os
 
 from dotenv import load_dotenv
