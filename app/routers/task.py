@@ -57,7 +57,7 @@ def get_db():
         db.close()
 
 
-db_dependency = Annotated[Session, Depends(get_db)]
+db_dependency = Annotated[Session, Depends(get_db)] # pylint: disable=invalid-name
 
 
 class TaskCreate(BaseModel):
