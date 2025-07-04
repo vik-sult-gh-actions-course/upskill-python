@@ -11,6 +11,7 @@ Key components:
 - `SessionLocal`: Factory for creating database sessions.
 - `Base`: Declarative base class with an explicit schema set to 'public' for model definitions.
 """
+
 import os
 
 from dotenv import load_dotenv

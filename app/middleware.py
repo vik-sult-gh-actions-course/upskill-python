@@ -9,6 +9,7 @@ Requires:
     - FastAPI
     - Python logging
 """
+
 import logging
 import time
 from datetime import datetime
@@ -16,8 +17,7 @@ from datetime import datetime
 from fastapi import Request
 
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,10 @@ async def log_requests(request: Request, call_next):
 
     logger.info(
         "Incoming request - Method: %s, Path: %s, Query: %s, Client: %s",
-        method, path, query_params, client_host
+        method,
+        path,
+        query_params,
+        client_host,
     )
 
     try:
@@ -72,7 +75,10 @@ async def log_requests(request: Request, call_next):
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     logger.info(
         "Request completed - Method: %s, Path: %s, Status: %s, Duration: %.2fms",
-        method, path, response.status_code, process_time
+        method,
+        path,
+        response.status_code,
+        process_time,
     )
 
     return response

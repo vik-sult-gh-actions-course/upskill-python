@@ -14,6 +14,7 @@ Key components:
 - Health check endpoint: Provides a simple endpoint to verify service availability.
 - Routers: API routes defined in modular files (e.g., task router).
 """
+
 from fastapi import FastAPI
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -34,7 +35,7 @@ def health_check():
     Returns:
         dict: A simple status message indicating the service is healthy.
     """
-    return {'status': 'Healthy'}
+    return {"status": "Healthy"}
 
 
 app.include_router(task.router)

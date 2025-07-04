@@ -1,6 +1,7 @@
 """
 Unit tests for the FastAPI application's health check endpoint.
 """
+
 from fastapi.testclient import TestClient
 
 from app import main
@@ -14,4 +15,6 @@ def test_main():
     """
     response = client.get("/healthy")
     assert response.status_code == 200
-    assert response.json() == {'status': 'Healthy'} # pylint: disable=missing-final-newline
+    assert response.json() == {
+        "status": "Healthy"
+    }  # pylint: disable=missing-final-newline

@@ -7,6 +7,7 @@ Classes:
     Status: Enum representing possible task statuses.
     Task: SQLAlchemy model for the 'task' table.
 """
+
 import enum
 from typing import Annotated
 
@@ -20,14 +21,17 @@ class Status(enum.Enum):
     """
     Enumeration of possible statuses for a task.
     """
-    PENDING = 'pending'
-    IN_PROGRESS = 'progress'
-    FAILED = 'failed'
-    COMPLETED = 'completed'
+
+    PENDING = "pending"
+    IN_PROGRESS = "progress"
+    FAILED = "failed"
+    COMPLETED = "completed"
+
 
 StatusColumn = Annotated[Status, mapped_column(Enum(Status))]
 
-class Task(Base): # pylint: disable=too-few-public-methods
+
+class Task(Base):  # pylint: disable=too-few-public-methods
     """
     SQLAlchemy model representing a task.
 
@@ -38,8 +42,9 @@ class Task(Base): # pylint: disable=too-few-public-methods
         status (Status): Current status of the task.
         due_date (str): Due date of the task.
     """
-    __tablename__ = 'task'
-    __table_args__ = {'schema': 'public'}
+
+    __tablename__ = "task"
+    __table_args__ = {"schema": "public"}
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)

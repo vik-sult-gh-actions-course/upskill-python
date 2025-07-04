@@ -1,6 +1,7 @@
 """
 Unit tests for the task-related API endpoints in the FastAPI application.
 """
+
 from .utils import app, client, override_get_db
 from ..routers.task import get_db
 
@@ -26,10 +27,10 @@ def test_get_task_by_id():
     tasks_list_response = client.get("/task")
     tasks_list_json = tasks_list_response.json()
 
-    task_id = tasks_list_json[0]['id']
+    task_id = tasks_list_json[0]["id"]
     response = client.get(f"/task/{task_id}")
     assert response.status_code == 200
-    assert task_id == response.json()['id'] # pylint: disable=missing-final-newline
+    assert task_id == response.json()["id"]  # pylint: disable=missing-final-newline
 
 
 def test_post_task_no_body():
@@ -46,13 +47,12 @@ def test_post_task():
     Test creating a new task via the /task/ endpoint.
     Asserts that the response status code is 201 (Created).
     """
-    headers = {"Content-Type": "application/json",
-               "Accept": "text/plain"}
+    headers = {"Content-Type": "application/json", "Accept": "text/plain"}
     payload = {
         "description": "With pure water",
         "due_date": "2027-07-21",
         "status": "pending",
-        "title": "[TEST_TEST_TEST]"
+        "title": "[TEST_TEST_TEST]",
     }
     response = client.post("/task/", headers=headers, json=payload)
     assert response.status_code == 201
@@ -66,6 +66,6 @@ def test_delete_test_task():
     tasks_list_response = client.get("/task")
     tasks_list_json = tasks_list_response.json()
     for task in tasks_list_json:
-        if task['title'] == "[TEST_TEST_TEST]":
+        if task["title"] == "[TEST_TEST_TEST]":
             response = client.delete(f"/task/{task['id']}")
             assert response.status_code == 200
