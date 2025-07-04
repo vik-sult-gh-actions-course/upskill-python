@@ -37,4 +37,4 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 
 # Pytest
 1. Enter source virtual environment ```fastapienv/bin/activate```
-2. Run command ```pytest app -W ignore::DeprecationWarning```
+2. Run command ```pytest app -W ignore::DeprecationWarning``` 
