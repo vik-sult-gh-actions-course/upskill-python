@@ -29,7 +29,7 @@ Requires:
 import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Request, Depends, Path
+from fastapi import APIRouter, Depends, Path
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from starlette import status
@@ -44,6 +44,12 @@ router = APIRouter(
 
 
 def get_db():
+    """
+        Dependency that provides a database session.
+
+        Yields:
+            Session: SQLAlchemy database session.
+        """
     db = SessionLocal()
     try:
         yield db
@@ -55,6 +61,15 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 
 class TaskCreate(BaseModel):
+    """
+        Schema for creating a new task.
+
+        Fields:
+            title (str): Title of the task (minimum 10 characters).
+            description (str | None): Optional description of the task (max 200 characters).
+            status (TaskStatus): Status of the task.
+            due_date (datetime.date | None): Optional due date for the task.
+        """
     title: str = Field(min_length=10)
     description: str | None = Field(
         default=None, title="The description of the task", max_length=200
@@ -81,6 +96,15 @@ class TaskCreate(BaseModel):
 
 
 class TaskResponse(BaseModel):
+    """
+        Schema for returning task data in API responses.
+
+        Fields:
+            title (str): Title of the task.
+            description (str | None): Optional description of the task.
+            status (TaskStatus): Status of the task.
+            due_date (datetime.date | None): Optional due date for the task.
+        """
     title: str = Field(min_length=10)
     description: str | None
     status: TaskStatus
@@ -88,6 +112,15 @@ class TaskResponse(BaseModel):
 
 
 class TaskUpdate(BaseModel):
+    """
+        Schema for updating an existing task.
+
+        Fields:
+            title (str | None): Optional new title for the task.
+            description (str | None): Optional new description.
+            status (TaskStatus | None): Optional new status.
+            due_date (datetime.date | None): Optional new due date.
+        """
     title: str | None = None
     description: str | None = None
     status: TaskStatus | None
@@ -108,17 +141,46 @@ class TaskUpdate(BaseModel):
 
 
 @router.get('/', status_code=status.HTTP_200_OK)
-async def get_task(request: Request, db: db_dependency):
+async def get_task(db: db_dependency):
+    """
+        Retrieve all tasks.
+
+        Args:
+            db (Session): Database session dependency.
+
+        Returns:
+            list: List of all Task objects.
+        """
     return db.query(Task).all()
 
 
 @router.get('/{task_id}', status_code=status.HTTP_200_OK)
-async def get_user(request: Request, task_id: int, db: db_dependency):
+async def get_user(task_id: int, db: db_dependency):
+    """
+        Retrieve a specific task by its ID.
+
+        Args:
+            task_id (int): ID of the task to retrieve.
+            db (Session): Database session dependency.
+
+        Returns:
+            Task | None: The Task object if found, else None.
+        """
     return db.query(Task).filter(Task.id == task_id).first()
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 async def create_task(user_request: TaskCreate, db: db_dependency):
+    """
+        Create a new task.
+
+        Args:
+            user_request (TaskCreate): Task creation data.
+            db (Session): Database session dependency.
+
+        Returns:
+            Task: The created Task object.
+        """
     task_request_model_dump = user_request.model_dump()
     task_model = Task(**task_request_model_dump)
     db.add(task_model)
@@ -130,6 +192,17 @@ async def create_task(user_request: TaskCreate, db: db_dependency):
 # Update (PUT)
 @router.put("/{task_id}", status_code=status.HTTP_200_OK, response_model=TaskResponse)
 async def update_task(task_id: int, user_request: TaskUpdate, db: db_dependency):
+    """
+        Update an existing task by its ID.
+
+        Args:
+            task_id (int): ID of the task to update.
+            user_request (TaskUpdate): Task update data.
+            db (Session): Database session dependency.
+
+        Returns:
+            Task: The updated Task object.
+        """
     task_model = db.query(Task).filter(Task.id == task_id).first()
     if user_request.title is not None:
         task_model.title = user_request.title
@@ -152,6 +225,16 @@ async def update_task(task_id: int, user_request: TaskUpdate, db: db_dependency)
 # Delete (DELETE)
 @router.delete("/{task_id}")
 async def delete_item(task_id: int, db: db_dependency):
+    """
+        Delete a task by its ID.
+
+        Args:
+            task_id (int): ID of the task to delete.
+            db (Session): Database session dependency.
+
+        Returns:
+            dict: Message indicating successful deletion.
+        """
     db_task = db.query(Task).filter(Task.id == task_id).first()
     db.delete(db_task)
     db.commit()

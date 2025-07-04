@@ -66,13 +66,13 @@ async def log_requests(request: Request, call_next):
     try:
         response = await call_next(request)
     except Exception as e:
-        logger.error(f"Request error: {str(e)}")
+        logger.error("Request error: %s", str(e))
         raise
 
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     logger.info(
-        f"Request completed - Method: {method}, Path: {path}, "
-        f"Status: {response.status_code}, Duration: {process_time:.2f}ms"
+        "Request completed - Method: %s, Path: %s, Status: %s, Duration: %.2fms",
+        method, path, response.status_code, process_time
     )
 
     return response
