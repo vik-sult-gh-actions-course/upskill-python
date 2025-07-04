@@ -204,17 +204,11 @@ async def update_task(task_id: int, user_request: TaskUpdate, db: db_dependency)
             Task: The updated Task object.
         """
     task_model = db.query(Task).filter(Task.id == task_id).first()
-    if user_request.title is not None:
-        task_model.title = user_request.title
 
-    if user_request.description is not None:
-        task_model.description = user_request.description
-
-    if user_request.status is not None:
-        task_model.status = user_request.status
-
-    if user_request.due_date is not None:
-        task_model.due_date = user_request.due_date
+    for field in ['title', 'description', 'status', 'due_date']:
+        value = getattr(user_request, field)
+        if value is not None:
+            setattr(task_model, field, value)
 
     db.commit()
 

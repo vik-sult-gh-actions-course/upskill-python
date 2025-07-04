@@ -8,8 +8,10 @@ Classes:
     Task: SQLAlchemy model for the 'task' table.
 """
 import enum
+from typing import Annotated
 
 from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import Mapped, mapped_column
 
 from .database import Base
 
@@ -22,6 +24,8 @@ class Status(enum.Enum):
     IN_PROGRESS = 'progress'
     FAILED = 'failed'
     COMPLETED = 'completed'
+
+StatusColumn = Annotated[Status, mapped_column(Enum(Status))]
 
 class Task(Base): # pylint: disable=too-few-public-methods
     """
@@ -40,5 +44,5 @@ class Task(Base): # pylint: disable=too-few-public-methods
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     description = Column(String)
-    status = Column(Enum(Status))
+    status: Mapped[StatusColumn]
     due_date = Column(String)

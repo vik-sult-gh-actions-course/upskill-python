@@ -16,10 +16,12 @@ from ..database import Base
 from ..main import app
 
 load_dotenv()
-engine = create_engine(
-    os.getenv("SQLALCHEMY_DATABASE_URI"),
-    poolclass=StaticPool,
-)
+
+db_url = os.getenv("SQLALCHEMY_DATABASE_URI")
+if db_url is None:
+    raise RuntimeError("SQLALCHEMY_DATABASE_URI environment variable is not set")
+
+engine = create_engine(db_url, poolclass=StaticPool)
 
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base.metadata.create_all(bind=engine)

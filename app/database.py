@@ -20,7 +20,11 @@ from sqlalchemy.orm import sessionmaker
 
 load_dotenv()
 
-engine = create_engine(os.getenv("DATABASE_URL"))
+db_url = os.getenv("DATABASE_URL")
+if db_url is None:
+    raise RuntimeError("DATABASE_URL environment variable is not set")
+
+engine = create_engine(db_url)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
