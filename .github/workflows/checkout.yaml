@@ -2,14 +2,6 @@ name: Checkout
 on: [ push ]
 
 jobs:
-  checkout-action:
-    runs-on: ubuntu-latest
-    steps:
-      - name: List Files Before
-        run: ls -a
-      - uses: actions/checkout@v3
-      - name: List Files After
-        run: ls -a
   checkout-and-display-files:
     runs-on: ubuntu-latest
     steps:
@@ -23,50 +15,14 @@ jobs:
           git checkout master
       - name: List Files After
         run: ls -a
-  test-pylint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir --upgrade -r requirements.txt
       - name: Run Pylint
         run: |
           cd app
           pylint $(git ls-files '*.py')
-  test-mypy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir --upgrade -r requirements.txt
       - name: Run Mypy
         run: |
           cd app
           mypy .
-  test-black-ckecker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --no-cache-dir --upgrade -r requirements.txt
       - name: Run Black Checker
         run: |
           cd app
