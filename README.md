@@ -32,8 +32,8 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 ### Sync department data via SFTPApi data
 
 1. Enter source virtual environment ```fastapienv/bin/activate```
-2. Run pgsql script ```SFTPApi/SFTPApi.sql``` to create db schema and db table
-3. Run python script python ```python sftp_api/sync_data.py```
+2. Run python script python ```python sftp_api/sync_data.py```
+3. Run pgsql script ```SFTPApi/SFTPApi.sql``` to move from raw to dw without duplicates
 
 # Pytest
 1. Enter source virtual environment ```fastapienv/bin/activate```
