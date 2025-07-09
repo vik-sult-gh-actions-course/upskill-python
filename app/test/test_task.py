@@ -7,6 +7,20 @@ from ..routers.task import get_db
 
 app.dependency_overrides[get_db] = override_get_db
 
+def test_post_task():
+    """
+    Test creating a new task via the /task/ endpoint.
+    Asserts that the response status code is 201 (Created).
+    """
+    headers = {"Content-Type": "application/json", "Accept": "text/plain"}
+    payload = {
+        "description": "With pure water",
+        "due_date": "2027-07-21",
+        "status": "pending",
+        "title": "[TEST_TEST_TEST]",
+    }
+    response = client.post("/task/", headers=headers, json=payload)
+    assert response.status_code == 201
 
 def test_get_task():
     """
@@ -40,22 +54,6 @@ def test_post_task_no_body():
     """
     response = client.post("/task/")
     assert response.status_code == 422
-
-
-def test_post_task():
-    """
-    Test creating a new task via the /task/ endpoint.
-    Asserts that the response status code is 201 (Created).
-    """
-    headers = {"Content-Type": "application/json", "Accept": "text/plain"}
-    payload = {
-        "description": "With pure water",
-        "due_date": "2027-07-21",
-        "status": "pending",
-        "title": "[TEST_TEST_TEST]",
-    }
-    response = client.post("/task/", headers=headers, json=payload)
-    assert response.status_code == 201
 
 
 def test_delete_test_task():

@@ -18,9 +18,9 @@ from ..main import app
 
 load_dotenv()
 
-db_url = os.getenv("SQLALCHEMY_DATABASE_URI")
+db_url = os.getenv("TEST_SQLALCHEMY_DATABASE_URI")
 if db_url is None:
-    raise RuntimeError("SQLALCHEMY_DATABASE_URI environment variable is not set")
+    raise RuntimeError("TEST_SQLALCHEMY_DATABASE_URI environment variable is not set")
 
 engine = create_engine(db_url, poolclass=StaticPool)
 
