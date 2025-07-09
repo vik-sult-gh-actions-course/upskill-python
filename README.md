@@ -25,7 +25,7 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 
 1. Enter source virtual environment ```fastapienv/bin/activate```
 2. Run pgsql script ```PostgreSQLScript/SitesApi.sql``` to create db schema and db table
-3. Run python script python ```python SitesAPI/collect_sites.py```
+3. Run python script python ```python sites_api/collect_sites.py```
 
 # SFTPApi
 

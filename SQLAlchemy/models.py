@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String, Boolean
 
 
 class Users(Base):
-    __tablename__ = 'users'
-    __table_args__ = {'schema': 'public'}
+    __tablename__ = "users"
+    __table_args__ = {"schema": "public"}
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True)

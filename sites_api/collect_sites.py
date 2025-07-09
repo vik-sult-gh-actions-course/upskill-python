@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
-from clients.sitesApi_client import SitesAPIClient
-from db import SessionLocal
-from models import *
+from sites_api.clients.sites_api_client import SitesAPIClient
+from sites_api.db import SessionLocal
+from sites_api.models import Sites
 
 load_dotenv()
 
@@ -29,15 +29,15 @@ for site in all_sites:
 
     # Common fields to update
     site_attributes = {
-        'name': site['name'],
-        'cid': site['cid'],
-        'manager': site['manager'],
-        'submanager': site['submanager'],
-        'state': site['state'],
-        'host': bool(site['host']),
-        'devteam': site['devteam'],
-        'lifetime': site['lifetime'],
-        'url': site['url'],
+        "name": site["name"],
+        "cid": site["cid"],
+        "manager": site["manager"],
+        "submanager": site["submanager"],
+        "state": site["state"],
+        "host": bool(site["host"]),
+        "devteam": site["devteam"],
+        "lifetime": site["lifetime"],
+        "url": site["url"],
     }
 
     if site_model is None:
@@ -52,4 +52,4 @@ for site in all_sites:
     session.commit()
 
 session.close()
-print('End collect sites process')
+print("End collect sites process")

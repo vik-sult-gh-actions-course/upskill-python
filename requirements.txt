@@ -28,3 +28,5 @@ starlette
 black
 pylint
 mypy
+types-requests
+types-passlib

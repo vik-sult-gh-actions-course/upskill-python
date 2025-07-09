@@ -2,11 +2,13 @@ import os
 from dotenv import load_dotenv
 import requests
 from typing import Dict, List, Optional
+
 load_dotenv()
+
 
 class SitesAPIClient:
     """
-    A client for interacting with the SitesAPI.
+    A client for interacting with the sites_api.
     Handles authentication and provides methods to access API endpoints.
     """
 
@@ -15,9 +17,9 @@ class SitesAPIClient:
         Initialize the client with the API base URL.
 
         Args:
-            base_url: The base URL of the SitesAPI (default: "http://localhost:8000")
+            base_url: The base URL of the sites_api (default: "http://localhost:8000")
         """
-        self.base_url = base_url.rstrip('/')
+        self.base_url = base_url.rstrip("/")
         self.token = None
 
     def signup(self, fullname: str, email: str, password: str) -> str:
@@ -36,21 +38,15 @@ class SitesAPIClient:
             Exception: If the request fails
         """
         url = f"{self.base_url}/user/signup"
-        payload = {
-            "fullname": fullname,
-            "email": email,
-            "password": password
-        }
-        params = {
-            "password": os.getenv("SITES_API_PASSWORD")
-        }
+        payload = {"fullname": fullname, "email": email, "password": password}
+        params = {"password": os.getenv("SITES_API_PASSWORD")}
 
         try:
             response = requests.post(url, json=payload, params=params)
             response.raise_for_status()
             data = response.json()
             self.token = data.get("access_token")
-            return self.token
+            return self.token or ""
         except requests.exceptions.RequestException as e:
             raise Exception(f"Signup failed: {str(e)}")
 
@@ -72,13 +68,10 @@ class SitesAPIClient:
             raise Exception("Not authenticated. Call signup() first.")
 
         url = f"{self.base_url}/get_list_of_sites"
-        params = {
-            "page": page,
-            "limit": limit
-        }
+        params = {"page": page, "limit": limit}
         headers = {
             "accept": "application/json",
-            "Authorization": f"Bearer {self.token}"
+            "Authorization": f"Bearer {self.token}",
         }
 
         try:
@@ -134,13 +127,15 @@ if __name__ == "__main__":
         token = client.signup(
             fullname="John Doe",
             email="john.doe@example.com",
-            password="securepassword123"
+            password="securepassword123",
         )
         print(f"Successfully authenticated. Token: {token[:10]}...")
 
         # Get first page of sites (10 items)
         sites_page = client.get_list_of_sites(page=0, limit=10)
-        print(f"First page contains {len(sites_page['data'])} sites out of {sites_page['total']}")
+        print(
+            f"First page contains {len(sites_page['data'])} sites out of {sites_page['total']}"
+        )
 
         # Get all sites (warning: might be a lot of data!)
         # all_sites = client.get_all_sites()

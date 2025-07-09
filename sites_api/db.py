@@ -3,7 +3,11 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-engine = create_engine(os.getenv("SQLALCHEMY_DATABASE_URI"))
+db_url = os.getenv("SQLALCHEMY_DATABASE_URI")
+if db_url is None:
+    raise RuntimeError("SQLALCHEMY_DATABASE_URI environment variable is not set")
+
+engine = create_engine(db_url)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

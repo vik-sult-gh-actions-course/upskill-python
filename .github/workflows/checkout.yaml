@@ -25,9 +25,7 @@ jobs:
           pylint $(git ls-files '*.py')
       - name: Run Mypy
         run: |
-          cd app
-          mypy .
+          mypy . --exclude __init__.py
       - name: Run Black Checker
         run: |
-          cd app
           black . --check

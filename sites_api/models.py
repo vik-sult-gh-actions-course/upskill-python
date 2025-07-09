@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String, Boolean, Text
 
 
 class Sites(Base):
-    __tablename__ = 'sites'
-    __table_args__ = {'schema': 'raw'}
+    __tablename__ = "sites"
+    __table_args__ = {"schema": "raw"}
 
     id = Column(Integer, primary_key=True, index=True)
     source_id = Column(String(50))
