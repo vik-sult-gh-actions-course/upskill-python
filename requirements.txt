@@ -17,8 +17,10 @@ python-dotenv
 alembic
 requests
 paramiko
+types-paramiko
 sftputil
 pandas
+pandas-stubs
 pyarrow
 fastparquet
 openpyxl

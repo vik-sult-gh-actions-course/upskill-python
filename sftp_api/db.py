@@ -5,6 +5,7 @@ Handles all PostgreSQL/MySQL database interactions including:
 - CRUD operations
 - Schema migrations
 """
+
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine, MetaData
@@ -15,7 +16,11 @@ DB_SCHEMA = "raw"
 
 load_dotenv()
 
-engine = create_engine(os.getenv("SQLALCHEMY_DATABASE_URI"))
+db_url = os.getenv("SQLALCHEMY_DATABASE_URI")
+if db_url is None:
+    raise RuntimeError("SQLALCHEMY_DATABASE_URI environment variable is not set")
+
+engine = create_engine(db_url)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -1,5 +1,9 @@
-import pandas as pd
+"""Module for reading various file formats using pandas with automatic reader selection."""
+
 from pathlib import Path
+
+import pandas as pd
+
 
 def read_file(filename, **kwargs):
     """
@@ -23,42 +27,42 @@ def read_file(filename, **kwargs):
 
     reader_map = {
         # CSV and variants
-        '.csv': pd.read_csv,
-        '.tsv': pd.read_csv,
-        '.txt': pd.read_csv,
-
+        ".csv": pd.read_csv,
+        ".tsv": pd.read_csv,
+        ".txt": pd.read_csv,
         # Excel variants
-        '.xls': pd.read_excel,
-        '.xlsx': pd.read_excel,
-        '.xlsm': pd.read_excel,
-        '.xlsb': pd.read_excel,
-        '.odf': pd.read_excel,
-        '.ods': pd.read_excel,
-        '.odt': pd.read_excel,
-
+        ".xls": pd.read_excel,
+        ".xlsx": pd.read_excel,
+        ".xlsm": pd.read_excel,
+        ".xlsb": pd.read_excel,
+        ".odf": pd.read_excel,
+        ".ods": pd.read_excel,
+        ".odt": pd.read_excel,
         # Parquet
-        '.parquet': pd.read_parquet,
-        '.pq': pd.read_parquet,
-
+        ".parquet": pd.read_parquet,
+        ".pq": pd.read_parquet,
         # JSON
-        '.json': pd.read_json,
+        ".json": pd.read_json,
     }
 
     if ext not in reader_map:
-        raise ValueError(f"Unsupported file extension: {ext}. Supported extensions are: {', '.join(reader_map.keys())}")
+        raise ValueError(
+            f"Unsupported file extension: {ext}. "
+            f"Supported extensions are: {', '.join(reader_map.keys())}"
+        )
 
     reader = reader_map[ext]
 
     # Handle extension-specific default arguments
     default_args = {}
-    if ext == '.json':
-        default_args['lines'] = True  # Set lines=True for JSON files
+    if ext == ".json":
+        default_args["lines"] = True  # Set lines=True for JSON files
 
-    if ext == '.xlsx':
-        default_args['sheet_name'] = None
-        default_args['engine'] = 'openpyxl'
+    if ext == ".xlsx":
+        default_args["sheet_name"] = None
+        default_args["engine"] = "openpyxl"
 
     # Merge default_args with user-provided kwargs (user kwargs take precedence)
     final_kwargs = {**default_args, **kwargs}
 
-    return reader(filename, **final_kwargs)
+    return reader(filename, **final_kwargs)  # pylint: disable=missing-final-newline
