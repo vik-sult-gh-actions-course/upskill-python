@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 """Added task table
 
 Revision ID: 86914b7363ed
@@ -21,6 +22,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
+    # pylint: disable=no-member
     op.create_table(
         "task",
         sa.Column("id", sa.Integer()),
@@ -30,12 +32,11 @@ def upgrade() -> None:
         sa.Column("due_date", sa.DateTime()),
         sa.PrimaryKeyConstraint("id"),
     )
-    pass
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     """Downgrade schema."""
+    # pylint: disable=no-member
     op.drop_table("task")
-    pass
     # ### end Alembic commands ###

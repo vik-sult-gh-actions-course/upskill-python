@@ -1,6 +1,13 @@
-from db import SessionLocal
-from models import *
+"""SQLAlchemy demonstration script for user management operations.
+
+This script demonstrates basic CRUD operations using SQLAlchemy ORM,
+including single insert, batch insert, and querying of user records.
+It also includes password hashing using passlib.
+"""
 from passlib.context import CryptContext
+
+from sites_api.db import SessionLocal # pylint: disable=import-error
+from models import Users # pylint: disable=import-error
 
 session = SessionLocal()
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -18,7 +25,8 @@ new_user = Users(
 session.add(new_user)
 session.commit()
 
-# 2. Batch insert (@see https://docs.sqlalchemy.org/en/20/orm/persistence_techniques.html#bulk-operations)
+# 2. Batch insert
+# (@see https://docs.sqlalchemy.org/en/20/orm/persistence_techniques.html#bulk-operations)
 users_to_insert = [
     Users(
         email="lingaro.test+1@test.com",

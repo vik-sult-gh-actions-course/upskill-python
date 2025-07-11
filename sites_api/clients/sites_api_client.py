@@ -1,10 +1,19 @@
+"""Client for interacting with the Sites API.
+
+This module provides a client class for authenticating and making requests to the Sites API,
+including user registration and site data retrieval functionality.
+"""
+
 import os
-from dotenv import load_dotenv
-import requests
 from typing import Dict, List, Optional
+
+import requests
+from dotenv import load_dotenv
+from requests.exceptions import RequestException, HTTPError
 
 load_dotenv()
 
+DEFAULT_TIMEOUT = 30  # seconds
 
 class SitesAPIClient:
     """
@@ -12,7 +21,7 @@ class SitesAPIClient:
     Handles authentication and provides methods to access API endpoints.
     """
 
-    def __init__(self, base_url: str = "http://localhost:8000"):
+    def __init__(self, base_url: str = "http://localhost:8000") -> None:
         """
         Initialize the client with the API base URL.
 
@@ -20,7 +29,7 @@ class SitesAPIClient:
             base_url: The base URL of the sites_api (default: "http://localhost:8000")
         """
         self.base_url = base_url.rstrip("/")
-        self.token = None
+        self.token: Optional[str] = None
 
     def signup(self, fullname: str, email: str, password: str) -> str:
         """
@@ -35,20 +44,35 @@ class SitesAPIClient:
             The access token
 
         Raises:
-            Exception: If the request fails
+            HTTPError: If the HTTP request fails
+            ValueError: If no access token is returned
+            RuntimeError: If signup fails for other reasons
         """
         url = f"{self.base_url}/user/signup"
         payload = {"fullname": fullname, "email": email, "password": password}
-        params = {"password": os.getenv("SITES_API_PASSWORD")}
+        params = {"password": os.getenv("SITES_API_PASSWORD", "")}
 
         try:
-            response = requests.post(url, json=payload, params=params)
+            response = requests.post(
+                url,
+                json=payload,
+                params=params,
+                timeout=DEFAULT_TIMEOUT
+            )
             response.raise_for_status()
             data = response.json()
-            self.token = data.get("access_token")
-            return self.token or ""
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Signup failed: {str(e)}")
+
+            # pylint: disable=redefined-outer-name
+            if not (token := data.get("access_token")):
+                raise ValueError("No access token in response")
+
+            self.token = token
+            return token
+
+        except HTTPError as e:
+            raise HTTPError(f"Signup failed with status {e.response.status_code}") from e
+        except RequestException as e:
+            raise RuntimeError(f"Signup request failed: {str(e)}") from e
 
     def get_list_of_sites(self, page: int = 0, limit: int = 10) -> Dict:
         """
@@ -62,10 +86,12 @@ class SitesAPIClient:
             Dictionary containing sites data, total count, and current page
 
         Raises:
-            Exception: If not authenticated or request fails
+            RuntimeError: If not authenticated
+            HTTPError: If the HTTP request fails
+            RequestException: If the request fails for other reasons
         """
         if not self.token:
-            raise Exception("Not authenticated. Call signup() first.")
+            raise RuntimeError("Not authenticated. Call signup() first.")
 
         url = f"{self.base_url}/get_list_of_sites"
         params = {"page": page, "limit": limit}
@@ -75,11 +101,20 @@ class SitesAPIClient:
         }
 
         try:
-            response = requests.get(url, params=params, headers=headers)
+            response = requests.get(
+                url,
+                params=params,
+                headers=headers,
+                timeout=DEFAULT_TIMEOUT
+            )
             response.raise_for_status()
             return response.json()
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Failed to fetch sites: {str(e)}")
+        except HTTPError as e:
+            raise HTTPError(
+                f"Failed to fetch sites with status {e.response.status_code}"
+            ) from e
+        except RequestException as e:
+            raise RequestException(f"Failed to fetch sites: {str(e)}") from e
 
     def get_all_sites(self, batch_size: int = 100) -> List[Dict]:
         """
@@ -92,32 +127,34 @@ class SitesAPIClient:
             List of all sites
 
         Raises:
-            Exception: If not authenticated or request fails
+            RuntimeError: If not authenticated or request fails
         """
         all_sites = []
         page = 0
         total = None
 
         while True:
-            response = self.get_list_of_sites(page=page, limit=batch_size)
+            try:
+                response = self.get_list_of_sites(page=page, limit=batch_size)
 
-            # First iteration - get total count
-            if total is None:
-                total = response.get("total", 0)
+                # First iteration - get total count
+                if total is None:
+                    total = response.get("total", 0)
 
-            # Add sites from current page
-            all_sites.extend(response.get("data", []))
+                # Add sites from current page
+                all_sites.extend(response.get("data", []))
 
-            # Check if we've fetched all sites
-            if len(all_sites) >= total:
-                break
+                # Check if we've fetched all sites
+                if len(all_sites) >= total:
+                    break
 
-            page += 1
+                page += 1
+            except Exception as e:
+                raise RuntimeError(f"Failed to retrieve all sites: {str(e)}") from e
 
         return all_sites
 
 
-# Example usage
 if __name__ == "__main__":
     # Initialize the client
     client = SitesAPIClient(base_url="http://localhost:8000")
@@ -137,9 +174,9 @@ if __name__ == "__main__":
             f"First page contains {len(sites_page['data'])} sites out of {sites_page['total']}"
         )
 
-        # Get all sites (warning: might be a lot of data!)
-        # all_sites = client.get_all_sites()
-        # print(f"Fetched {len(all_sites)} sites in total")
-
-    except Exception as e:
-        print(f"Error: {str(e)}")
+    except HTTPError as e:
+        print(f"HTTP Error occurred: {str(e)}")
+    except RequestException as e:
+        print(f"Request failed: {str(e)}")
+    except Exception as e: # pylint: disable=broad-exception-caught
+        print(f"Unexpected error: {str(e)}") # pylint: disable=missing-final-newline

@@ -1,9 +1,38 @@
+"""Site data collection and synchronization script.
+
+This script performs the following operations:
+1. Initializes a connection to the Sites API
+2. Authenticates with the API using test credentials
+3. Retrieves all available sites from the API
+4. Synchronizes site data with the local database:
+   - Creates new site records for previously unknown sites
+   - Updates existing site records with current data
+
+Environment Variables:
+    SITES_API_URL: Base URL for the Sites API service (required)
+
+Dependencies:
+    - sites_api_client: Handles API communication
+    - SQLAlchemy models: Database ORM models
+    - python-dotenv: Environment variable management
+
+Example Usage:
+    $ export SITES_API_URL="http://api.example.com"
+    $ python collect_sites.py
+
+Note:
+    The script uses test credentials for demonstration purposes.
+    In production, replace with proper authentication.
+"""
 import os
+
 from dotenv import load_dotenv
+
 from sites_api.clients.sites_api_client import SitesAPIClient
 from sites_api.db import SessionLocal
 from sites_api.models import Sites
 
+# Load environment variables from .env file
 load_dotenv()
 
 session = SessionLocal()

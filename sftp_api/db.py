@@ -1,27 +1,9 @@
-"""Database operations and utilities for the SFTP API service.
+"""Package-specific database configuration."""
+from core.db.base_db import setup_database
 
-Handles all PostgreSQL/MySQL database interactions including:
-- Connection pooling
-- CRUD operations
-- Schema migrations
-"""
-
-import os
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
-DB_SCHEMA = "raw"
-
-load_dotenv()
-
-db_url = os.getenv("SQLALCHEMY_DATABASE_URI")
-if db_url is None:
-    raise RuntimeError("SQLALCHEMY_DATABASE_URI environment variable is not set")
-
-engine = create_engine(db_url)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base(metadata=MetaData(schema=DB_SCHEMA))
+# Initialize with default configuration
+DB_SCHEMA = "raw"  # Default schema for this package
+db_config = setup_database(DB_SCHEMA)
+engine = db_config['engine']
+SessionLocal = db_config['SessionLocal']
+Base = db_config['Base']  # pylint: disable=missing-final-newline

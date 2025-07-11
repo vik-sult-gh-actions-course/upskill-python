@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 1. Enter source virtual environment ```fastapienv/bin/activate```
 2. Run pgsql script ```PostgreSQLScript/UsersTable.sql``` to create db schema and db table
-3. Run python script python ```python SQLAlchemy/app.py```
+3. Run python script python ```python sql_alchemy/app.py```
 
 # SitesAPI
 
@@ -36,5 +36,6 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 3. Run pgsql script ```SFTPApi/SFTPApi.sql``` to move from raw to dw without duplicates
 
 # Pytest
+
 1. Enter source virtual environment ```fastapienv/bin/activate```
-2. Run command ```pytest app -W ignore::DeprecationWarning``` 
+2. Run command ```pytest app -W ignore::DeprecationWarning```
