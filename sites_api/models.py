@@ -4,10 +4,12 @@ This module contains SQLAlchemy model definitions for the Sites API,
 including the main Sites table structure.
 """
 
+from typing import Any
 from sqlalchemy import Column, Integer, String, Boolean, Text
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+Base: Any = declarative_base()
+
 
 class Sites(Base):
     """SQLAlchemy model representing sites in the system.
@@ -25,6 +27,7 @@ class Sites(Base):
         state: Current state
         url: Site URL
     """
+
     __tablename__ = "sites"
     __table_args__ = {"schema": "raw"}
 
@@ -50,4 +53,4 @@ class Sites(Base):
         Returns:
             str: A formatted string combining site name and ID
         """
-        return f"{self.name} (ID: {self.source_id})" # pylint: disable=missing-final-newline
+        return f"{self.name} (ID: {self.source_id})"

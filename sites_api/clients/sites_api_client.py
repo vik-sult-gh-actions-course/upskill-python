@@ -15,6 +15,7 @@ load_dotenv()
 
 DEFAULT_TIMEOUT = 30  # seconds
 
+
 class SitesAPIClient:
     """
     A client for interacting with the sites_api.
@@ -54,10 +55,7 @@ class SitesAPIClient:
 
         try:
             response = requests.post(
-                url,
-                json=payload,
-                params=params,
-                timeout=DEFAULT_TIMEOUT
+                url, json=payload, params=params, timeout=DEFAULT_TIMEOUT
             )
             response.raise_for_status()
             data = response.json()
@@ -70,7 +68,9 @@ class SitesAPIClient:
             return token
 
         except HTTPError as e:
-            raise HTTPError(f"Signup failed with status {e.response.status_code}") from e
+            raise HTTPError(
+                f"Signup failed with status {e.response.status_code}"
+            ) from e
         except RequestException as e:
             raise RuntimeError(f"Signup request failed: {str(e)}") from e
 
@@ -102,10 +102,7 @@ class SitesAPIClient:
 
         try:
             response = requests.get(
-                url,
-                params=params,
-                headers=headers,
-                timeout=DEFAULT_TIMEOUT
+                url, params=params, headers=headers, timeout=DEFAULT_TIMEOUT
             )
             response.raise_for_status()
             return response.json()
@@ -178,5 +175,5 @@ if __name__ == "__main__":
         print(f"HTTP Error occurred: {str(e)}")
     except RequestException as e:
         print(f"Request failed: {str(e)}")
-    except Exception as e: # pylint: disable=broad-exception-caught
-        print(f"Unexpected error: {str(e)}") # pylint: disable=missing-final-newline
+    except Exception as e:  # pylint: disable=broad-exception-caught
+        print(f"Unexpected error: {str(e)}")

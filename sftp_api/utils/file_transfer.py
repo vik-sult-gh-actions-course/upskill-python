@@ -44,6 +44,4 @@ class SftpFileTransfer:  # pylint: disable=too-few-public-methods
         remote_path = os.path.join(self.remote_base_path, filename)
         local_path = os.path.join(self.local_base_path, filename)
 
-        self.sftp_client.get(
-            remote_path, local_path
-        ) # pylint: disable=missing-final-newline
+        self.sftp_client.get(remote_path, local_path)

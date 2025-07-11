@@ -24,6 +24,7 @@ Note:
     The script uses test credentials for demonstration purposes.
     In production, replace with proper authentication.
 """
+
 import os
 
 from dotenv import load_dotenv

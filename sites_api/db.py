@@ -1,8 +1,9 @@
 """Package-specific database configuration."""
+
 from core.db.base_db import setup_database
 
 # Initialize with default configuration
 db_config = setup_database("raw")
-engine = db_config['engine']
-SessionLocal = db_config['SessionLocal']
-Base = db_config['Base']  # pylint: disable=missing-final-newline
+engine = db_config["engine"]
+SessionLocal = db_config["SessionLocal"]
+Base = db_config["Base"]

@@ -39,3 +39,13 @@ SitesAPI is available locally under URL http://localhost:8000/docs#/sites
 
 1. Enter source virtual environment ```fastapienv/bin/activate```
 2. Run command ```pytest app -W ignore::DeprecationWarning```
+
+# Pylint
+
+1. Enter source virtual environment ```fastapienv/bin/activate```
+2. Run command ```pylint $(git ls-files '*.py')```
+
+# Black
+
+1. Enter source virtual environment ```fastapienv/bin/activate```
+2. Run command ```black . --check```

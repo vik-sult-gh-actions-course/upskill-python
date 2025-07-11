@@ -22,8 +22,7 @@ config = context.config  # pylint: disable=no-member
 
 # Set database URI from environment variable
 config.set_main_option(
-    "SQLALCHEMY_DATABASE_URI",
-    os.getenv("SQLALCHEMY_DATABASE_URI", "")
+    "SQLALCHEMY_DATABASE_URI", os.getenv("SQLALCHEMY_DATABASE_URI", "")
 )
 
 # Configure logging
@@ -32,6 +31,7 @@ if config.config_file_name is not None:
 
 # Target metadata for autogenerate support
 target_metadata = Base.metadata
+
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -63,8 +63,7 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(  # pylint: disable=no-member
-            connection=connection,
-            target_metadata=target_metadata
+            connection=connection, target_metadata=target_metadata
         )
 
         with context.begin_transaction():  # pylint: disable=no-member
@@ -74,4 +73,4 @@ def run_migrations_online() -> None:
 if context.is_offline_mode():  # pylint: disable=no-member
     run_migrations_offline()
 else:
-    run_migrations_online() # pylint: disable=missing-final-newline
+    run_migrations_online()

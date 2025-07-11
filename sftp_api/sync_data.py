@@ -132,6 +132,4 @@ for file in os.listdir(LOCAL_PATH):
         process_department_people(FILE_PATH, name)
     else:
         df["raw_create_date"] = pd.Timestamp.now()
-        append_dataframe_to_sql(
-            df, name, ENGINE, DB_SCHEMA
-        ) # pylint: disable=missing-final-newline
+        append_dataframe_to_sql(df, name, ENGINE, DB_SCHEMA)

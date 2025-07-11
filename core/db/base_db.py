@@ -1,4 +1,5 @@
 """Shared database configuration for SQLAlchemy ORM."""
+
 from typing import Optional, Dict, Any
 import os
 from sqlalchemy import create_engine, MetaData
@@ -7,7 +8,9 @@ from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 
 
-def setup_database(schema: str = "public", db_url: Optional[str] = None) -> Dict[str, Any]:
+def setup_database(
+    schema: str = "public", db_url: Optional[str] = None
+) -> Dict[str, Any]:
     """Initialize and return database components.
 
     Args:
@@ -21,7 +24,9 @@ def setup_database(schema: str = "public", db_url: Optional[str] = None) -> Dict
     db_url = db_url or os.getenv("SQLALCHEMY_DATABASE_URI")
 
     if not db_url:
-        raise RuntimeError("Database URL not provided and SQLALCHEMY_DATABASE_URI not set")
+        raise RuntimeError(
+            "Database URL not provided and SQLALCHEMY_DATABASE_URI not set"
+        )
 
     engine = create_engine(db_url)
     # pylint: disable=invalid-name
@@ -29,8 +34,4 @@ def setup_database(schema: str = "public", db_url: Optional[str] = None) -> Dict
     # pylint: disable=invalid-name
     Base = declarative_base(metadata=MetaData(schema=schema))
 
-    return {
-        'engine': engine,
-        'SessionLocal': SessionLocal,
-        'Base': Base
-    }  # pylint: disable=missing-final-newline
+    return {"engine": engine, "SessionLocal": SessionLocal, "Base": Base}

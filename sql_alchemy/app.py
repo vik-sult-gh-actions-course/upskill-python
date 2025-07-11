@@ -4,10 +4,11 @@ This script demonstrates basic CRUD operations using SQLAlchemy ORM,
 including single insert, batch insert, and querying of user records.
 It also includes password hashing using passlib.
 """
+
 from passlib.context import CryptContext
 
-from models import Users # pylint: disable=import-error
-from sites_api.db import SessionLocal # pylint: disable=import-error
+from sql_alchemy.models import Users  # pylint: disable=import-error
+from sql_alchemy.db import SessionLocal  # pylint: disable=import-error
 
 session = SessionLocal()
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

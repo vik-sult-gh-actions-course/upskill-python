@@ -65,4 +65,4 @@ def read_file(filename, **kwargs):
     # Merge default_args with user-provided kwargs (user kwargs take precedence)
     final_kwargs = {**default_args, **kwargs}
 
-    return reader(filename, **final_kwargs)  # pylint: disable=missing-final-newline
+    return reader(filename, **final_kwargs)

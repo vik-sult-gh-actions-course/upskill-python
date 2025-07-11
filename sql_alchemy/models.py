@@ -5,7 +5,7 @@ in the database, including their authentication and authorization attributes.
 """
 
 from sqlalchemy import Column, Integer, String, Boolean
-from db import Base # pylint: disable=import-error
+from sql_alchemy.db import Base  # pylint: disable=import-error
 
 
 class Users(Base):
@@ -61,4 +61,4 @@ class Users(Base):
         Returns:
             str: Concatenated first and last name with space separation
         """
-        return f"{self.first_name} {self.last_name}".strip() # pylint: disable=missing-final-newline
+        return f"{self.first_name} {self.last_name}".strip()

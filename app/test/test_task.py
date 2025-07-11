@@ -32,7 +32,7 @@ def test_get_task():
     response = client.get("/task")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
-    assert len(response.json()) > 0 # pylint: disable=missing-final-newline
+    assert len(response.json()) > 0
 
 
 def test_get_task_by_id():
@@ -46,7 +46,7 @@ def test_get_task_by_id():
     task_id = tasks_list_json[0]["id"]
     response = client.get(f"/task/{task_id}")
     assert response.status_code == 200
-    assert task_id == response.json()["id"]  # pylint: disable=missing-final-newline
+    assert task_id == response.json()["id"]
 
 
 def test_post_task_no_body():
