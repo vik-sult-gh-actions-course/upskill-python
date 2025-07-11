@@ -6,8 +6,8 @@ It also includes password hashing using passlib.
 """
 from passlib.context import CryptContext
 
-from sites_api.db import SessionLocal # pylint: disable=import-error
 from models import Users # pylint: disable=import-error
+from sites_api.db import SessionLocal # pylint: disable=import-error
 
 session = SessionLocal()
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
